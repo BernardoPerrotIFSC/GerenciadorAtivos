@@ -1,0 +1,80 @@
+:root{
+    --cor1: #D6D1D5;
+    --cor2: #F0F0F2;
+    --cor3: #7C8C03;
+    --cor4: #384001;
+    --cor5: #222601;
+    --fonte1: Verdana, Geneva, Tahoma, sans-serif;
+    --fonte2: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body{
+    font-family: Arial, Helvetica, sans-serif
+}
+h1{
+    text-align: center;
+    padding: 50px;
+}
+table{
+    border: 1px solid black;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 100px;
+}
+form{
+    margin-bottom: 100px;
+}
+thead{
+    background-color: #808080;
+    color: white;
+    text-align: center;
+}
+td, th{
+    text-align: center;
+    border: 1px solid gray;
+    margin: 1px;
+    padding: 5px;
+}
+#ticker{
+    background-color: lightgreen;
+}
+.lucro{
+    background-color: lightgreen;
+}
+.prejuizo{
+    background-color: red;
+}
+.auth{
+    margin-left: 100px;
+    margin-right: 100px;
+}
+.preco_acao{
+    font-size: 1.3em;
+    font-weight: bold;
+}
+.result{
+    border-top: 2px solid black;
+}
+footer{
+    background-color: var(--cor4);
+    color:white;
+    text-align: center;
+    font-size: 0.8em;
+    padding: 5px;
+    margin-bottom: 0px;
+}
+footer a{
+    color: white;
+    font-weight: bolder;
+    text-decoration: none;
+
+}
+footer a:hover{
+    text-decoration: underline;
+    color:var(--cor1)
+}
+.fixarRodape {
+    bottom: 0;
+    position: fixed;
+    width: 100%;
+    text-align: center;
+}

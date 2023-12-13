@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}Crypto{% endblock %}
+{% block content %}
+    <h1>Carteira de CriptoAtivos</h1>
+    <table>
+        <thead>
+            <th>Ticker</th>
+            <th>Preço Pago</th>
+            <th>Quantidade</th>
+            <th>Valor Pago</th>
+            <th>Data Compra</th>
+            <th>Cotação atual</th>
+            <th>valor atual</th>
+            <th>Lucro/Prejuízo</th>
+            <th>Rentabilidade</th>
+            <th>Gráfico</th>
+            <th><a class="btn btn-success" href="/atualiza-Crypto">Atualizar</a></th>
+            
+        </thead>
+        {% for crypto in usuario.cryptos %}
+            <tr>
+                <!-- <td id="ticker">{{ crypto.ticker }}</td> -->
+                {% if crypto.status == "lucro" %}
+                    <td class="lucro">{{ crypto.ticker }}</td>
+                {% elif crypto.status == "zero" %}
+                    <td class="zero">{{ crypto.ticker }}</td>
+                {% else %}
+                    <td class="prejuizo">{{ crypto.ticker }}</td>
+                {% endif %}
+                <td>$ {{ crypto.preco_pago }}</td>
+                <td>{{ crypto.quantidade }}</td>
+                <td>$ {{ crypto.valor_pago }}</td>
+                <td>{{ crypto.data_compra}}</td>
+                <td class="preco_acao">$ {{ crypto.preco_atual }}</td>
+                <td>$ {{ crypto.valor_atual }}</td>
+                {% if crypto.status == "lucro" %}
+                    <td class="lucro">$ {{ crypto.lucro_prejuizo  }}</td>
+                    <td class="lucro">{{ crypto.rentabilidade }}% </td>
+                {% elif crypto.status == "zero" %}
+                    <td class="zero">$ {{ crypto.lucro_prejuizo  }}</td>
+                    <td class="zero">{{ crypto.rentabilidade }}% </td>
+                {% else %}
+                    <td class="prejuizo">$ {{ crypto.lucro_prejuizo  }}</td>
+                    <td class="prejuizo">{{ crypto.rentabilidade }}% </td>
+                {% endif %}
+                <td><a href="{{crypto.link}}" target="_blank">TradingView</a></td>
+                <td>
+                    <!-- <button class="btn btn-danger" type="submit" type="button" onClick="removeCrypto({{ crypto.id }})">remover</button> -->
+                </td>
+            </tr>
+        {% endfor %}
+        {% for valor in usuario.carteira_cripto %}
+            <tfoot>
+                <tr class="result">
+                    <td>Total</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>$ {{valor.valor_pago_total}}</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>$ {{valor.valor_atual_total}}</td>
+                    {% if valor.status == "lucro" %}
+                        <td class="lucro">$ {{valor.lucro_prejuizo}}</td>
+                        <td class="lucro">{{valor.rentabilidade_total}} %</td>
+                    {% elif valor.status == zero %}
+                        <td class="zero">$ {{valor.lucro_prejuizo}}</td>
+                        <td class="zero">{{valor.rentabilidade_total}} %</td>
+                    {% else %}
+                        <td class="prejuizo">4 {{valor.lucro_prejuizo}}</td>
+                        <td class="prejuizo">{{valor.rentabilidade_total}} %</td>
+                    {% endif %}
+                    <td>{{valor.last_update}}</td>
+                </tr>
+            </tfoot>
+        {% endfor %}
+
+        
+        </table>
+
+{% endblock %}

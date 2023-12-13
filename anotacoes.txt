@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}{% endblock %}
+{% block content %}
+{% endblock %}
+
+import yfinance as yf
+ticker_symbol = "RANI3.SA"
+quantidade = 100
+start_date = "2021-12-01"
+ticker = yf.Ticker(ticker_symbol)
+dividend_info = ticker.dividends
+filtered_dividends = dividend_info[dividend_info.index >= start_date]
+total = 0
+count = -1
+for i in filtered_dividends:
+    dividend = dividend_info.iloc[count]
+    total = total + dividend
+    count = count -1
+    print(dividend)  
+print(total*quantidade)

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <h1>Home</h1>
+    <table>
+        <thead>
+            <th>Usuário</th>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <!-- <th>Senha</th> -->
+            <th>Saldo total</th>
+            <th>Total Carteira de Ações</th>
+            <th>Total Carteira Cripto</th>
+            <th>Total Carteira Cripto</th>
+        </thead>
+        <tr>
+            <td>{{usuario}}</td>
+            <td>{{usuario.nome}}</td>
+            <td>{{usuario.email}}</td>
+            <!-- <td>{{usuario.senha}}</td> -->
+            <td>R$ {{total}}</td>
+            <td>R$ {{total_acoes}}</td>
+            <td>$ {{total_cripto}}</td>
+            <td>R$ {{total_cripto_real}}</td>
+        </tr>
+    </table>
+
+{% endblock %}

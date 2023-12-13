@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+{% block content %}
+    <h1>Carteira de Ações</h1>
+
+    <table class="">
+        <thead>
+            <th>Ticker</th>
+            <th>Preço Pago</th>
+            <th>Quantidade</th>
+            <th>Valor Pago</th>
+            <th>Data Compra</th>
+            <th>Cotação atual</th>
+            <th>Valor Atual</th>
+            <th>Lucro/Prejuízo</th>
+            <th>Rentabilidade</th>
+            <th>Gráfico</th>
+            <th>Last Dividend</th>
+            <th><a class="btn btn-success" href="/atualiza-Acoes">Atualizar</a></th>
+        </thead>
+        {% for acao in usuario.acoes %}
+            <tr>
+                <!-- <td id="ticker">{{ acao.ticker }}</td> -->
+                {% if acao.status == "lucro" %}
+                    <td class="lucro">{{ acao.ticker }}</td>
+                {% elif acao.status == "zero" %}
+                    <td class="zero">{{ acao.ticker }}</td>
+                {% else %}
+                    <td class="prejuizo">{{ acao.ticker }}</td>
+                {% endif %}
+                <td>R$ {{ acao.preco_pago }}</td>
+                <td>{{ acao.quantidade }}</td>
+                <td>R$ {{ acao.valor_pago }}</td>
+                <td>{{ acao.data_compra}}</td>
+                <td class="preco_acao">R$ {{ acao.preco_atual }}</td>
+                <td>R$ {{ acao.valor_atual }}</td>
+                {% if acao.status == "lucro" %}
+                    <td class="lucro">R$ {{ acao.lucro_prejuizo  }}</td>
+                    <td class="lucro">{{ acao.rentabilidade }}% </td>
+                {% elif acao.status == "zero" %}
+                    <td class="zero">R$ {{ acao.lucro_prejuizo  }}</td>
+                    <td class="zero">{{ acao.rentabilidade }}% </td>
+                {% else %}
+                    <td class="prejuizo">R$ {{ acao.lucro_prejuizo  }}</td>
+                    <td class="prejuizo">{{ acao.rentabilidade }}% </td>
+                {% endif %}
+                <td><a target="_blank" href="{{acao.link}}">TradingView</a></td>
+                <td>R$ {{acao.last_yield}}</td>
+                <td>
+                    <!-- <button type="button" class="btn btn-danger" onClick="removeAcao({{ acao.id }})">remover</button> -->
+                </td>
+            </tr>
+        {% endfor %}
+        {% for valor in usuario.carteira_acoes %}
+            <tfoot>
+                <tr class="result">
+                    <td>Total</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>R$ {{valor.valor_pago_total}}</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>R$ {{valor.valor_atual_total}}</td>
+                    {% if valor.status == "lucro" %}
+                        <td class="lucro">R$ {{valor.lucro_prejuizo}}</td>
+                        <td class="lucro">{{valor.rentabilidade_total}} %</td>
+                    {% elif valor.status == zero %}
+                        <td class="zero">R$ {{valor.lucro_prejuizo}}</td>
+                        <td class="zero">{{valor.rentabilidade_total}} %</td>
+                    {% else %}
+                        <td class="prejuizo">R$ {{valor.lucro_prejuizo}}</td>
+                        <td class="prejuizo">{{valor.rentabilidade_total}} %</td>
+                    {% endif %}
+                    <td>{{valor.last_update}}</td>
+                </tr>
+            </tfoot>
+        {% endfor %}
+    </table>
+{% endblock %}

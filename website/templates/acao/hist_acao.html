@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Hist Ações{% endblock %}
+{% block content %}
+    <h1>Histórico da Carteira de Ações</h1>
+    <table>
+        <thead>
+            <th>Ticker</th>
+            <th>Descrição</th>
+            <th>Preço</th>
+            <th>Quantidade</th>
+            <th>Valor</th>
+            <th>Tipo</th>
+            <th>Data</th>
+        </thead>
+        {% for acao in usuario.hist_acao %}
+            <tr>
+                <td>{{acao.ticker}}</td>
+                <td>{{acao.descricao}}</td>
+                <td>R$ {{acao.preco}}</td>
+                <td>{{acao.quantidade}}</td>
+                <td>R$ {{acao.valor}}</td>
+                <td>{{acao.tipo}}</td>
+                <td>{{acao.data}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

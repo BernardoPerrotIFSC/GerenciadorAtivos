@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Conta{% endblock %}
+{% block content %}
+    <h1>Conta</h1>
+    <form method="POST" class="">
+        <div class="form-control">
+            <label for="AdicionaValor">Valor a ser adicionado na conta</label>
+            <input type="number" name="insere_valor">
+        </div>
+        <button type="submit" class="btn btn-primary">enviar</button>
+    </form>
+    <table>
+        <thead>
+            <th>Id</th>
+            <th>Valor</th>
+        </thead>
+        {% for item in usuario.conta %}
+            <tr>
+                <td>{{item.id}}</td>
+                <td>{{item.valor_total}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
