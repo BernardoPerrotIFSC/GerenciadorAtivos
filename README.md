@@ -1,4 +1,4 @@
-# CotacaoAcao
+# Gerenciador De Ativos
 Bibliotecas: 
 pip3 install flask
 pip3 install flask_login
