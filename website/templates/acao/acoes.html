@@ -16,7 +16,6 @@
             <th>Lucro/Prejuízo</th>
             <th>Rentabilidade</th>
             <th>Gráfico</th>
-            <th>Last Dividend</th>
             <th><a class="btn btn-success" href="/atualiza-Acoes">Atualizar</a></th>
         </thead>
         {% for acao in usuario.acoes %}
@@ -46,9 +45,8 @@
                     <td class="prejuizo">{{ acao.rentabilidade }}% </td>
                 {% endif %}
                 <td><a target="_blank" href="{{acao.link}}">TradingView</a></td>
-                <td>R$ {{acao.last_yield}}</td>
                 <td>
-                    <!-- <button type="button" class="btn btn-danger" onClick="removeAcao({{ acao.id }})">remover</button> -->
+                    <button type="button" class="btn btn-danger" onClick="removeAcao({{ acao.id }})">remover</button>
                 </td>
             </tr>
         {% endfor %}
@@ -73,6 +71,39 @@
                         <td class="prejuizo">{{valor.rentabilidade_total}} %</td>
                     {% endif %}
                     <td>{{valor.last_update}}</td>
+                </tr>
+            </tfoot>
+        {% endfor %}
+    </table>
+    <h1>Dividendos</h1>
+    <table class="idiv">
+        <thead>
+            <th>Ticker</th>
+            <th>Quantidade</th>
+            <th>Data Compra</th>
+            <th>Ultimo Dividendo</th>
+            <th>Total Dividendos</th>
+            <th>Yield Total</th>
+            <th><a class="btn btn-success" href="/atualiza-Dividendos">Atualizar</a></th>
+        </thead>
+        {% for acao in usuario.acoes %}
+            <tr>
+                <td id="ticker">{{ acao.ticker }}</td>
+                <td>{{ acao.quantidade }}</td>
+                <td>{{ acao.data_compra}}</td>
+                <td>R$ {{acao.last_yield}}</td>
+                <td>R$ {{acao.total_dividends}}</td>
+                <td>{{acao.yield_total}} %</td>
+            </tr>
+        {% endfor %}
+        {% for valor in usuario.carteira_acoes %}
+            <tfoot>
+                <tr class="result">
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>R$ {{valor.total_dividendos}}</td>
                 </tr>
             </tfoot>
         {% endfor %}

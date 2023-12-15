@@ -18,20 +18,34 @@ def home():
     carteira_acoes = CarteiraAcoes.query.filter_by(usuario_id = current_user.id).first()
     carteira_criptos = CarteiraCripto.query.filter_by(usuario_id = current_user.id).first()
     total_acoes = round(carteira_acoes.valor_atual_total, 2)
+    total_dividendos = round(carteira_acoes.total_dividendos, 2)
     total_cripto = round(carteira_criptos.valor_atual_total, 2)
     total_cripto_real = round(total_cripto * cotacao_dol, 2)
     total = round(total_acoes+total_cripto_real, 2)
-    return render_template("home.html", usuario=current_user, total=total, total_cripto_real=total_cripto_real, total_acoes=total_acoes, total_cripto=total_cripto)
+    return render_template("home.html", usuario=current_user, total=total, total_cripto_real=total_cripto_real, total_acoes=total_acoes, total_dividendos=total_dividendos, total_cripto=total_cripto)
 
+#CONTA
 @views.route('/conta', methods=["GET","POST"])
 @login_required
 def conta():
     if request.method == "POST":
         conta = Conta.query.filter_by(usuario_id=current_user.id)
-        valor_adicioando = request.form.get("insere_valor")
-        conta.valor_total += valor_adicioando
+        valor_adicioando = float(request.form.get("insere_valor"))
+        conta.saldo += valor_adicioando
         db.session.commit()
     return render_template("conta/conta.html", usuario=current_user)
+
+#ADD CONTA
+@views.route('/add-conta', methods=["GET","POST"])
+@login_required
+def add_conta():
+    return render_template("conta/add_conta.html", usuario=current_user)
+
+#HIST CONTA
+@views.route('/hist-conta', methods=["GET","POST"])
+@login_required
+def hist_conta():
+    return render_template("conta/hist_conta.html", usuario=current_user)
 
 #TABELA AÇÃO
 @views.route('/acoes', methods= ['GET','POST'])
@@ -72,7 +86,7 @@ def add_acao():
             db.session.add(nova_acao)
             db.session.commit()
             flash(f"{ticker} adicionada a carteira", category='success')
-            return redirect(url_for('views.acoes'))
+            return redirect(url_for('views.add-acao'))
     except:
         flash("Não foi possível!", category="error")
     return render_template('acao/add_acao.html', usuario=current_user)
@@ -91,6 +105,7 @@ def remover_acao():
             flash("Ação removida da carteira!", category='success')
     return jsonify({})
 
+#VENDE ACAO
 @views.route('/rm-acao', methods=['POST','GET'])
 @login_required
 def rm_acao():
@@ -127,7 +142,6 @@ def atualiza_acao():
         for acao in acoes:
             if acao.usuario_id == current_user.id:
                 ativo = yf.Ticker(acao.ticker+".SA")
-                dividend_info = ativo.dividends
                 acao.preco_atual = round(ativo.history(period='1d')['Close'][0], 2)
                 acao.valor_atual = round(acao.preco_atual*acao.quantidade, 2)
                 acao.lucro_prejuizo = round(acao.valor_atual-acao.valor_pago, 2)
@@ -138,8 +152,6 @@ def atualiza_acao():
                     acao.status = "zero"
                 else:
                     acao.status = "prejuizo"
-                acao.last_yield = latest_dividend = dividend_info.iloc[-1]
-                stock_price = ativo.history(period="1d")["Close"].iloc[-1]
                 db.session.commit()
         qry = db.session.query(func.sum(Acao.valor_pago).label("valor_pago"),
                             func.sum(Acao.valor_atual).label("preco_atual")).filter_by(usuario_id=current_user.id)
@@ -162,9 +174,43 @@ def atualiza_acao():
         flash("Valores atualizados", category='success')
         return redirect(url_for('views.acoes'))
     except:
-        flash("Não foi possível!")
+        flash("Não foi possível!", category="error")
         return redirect(url_for('views.acoes'))
 
+@views.route('/atualiza-Dividendos', methods = ['POST', 'GET'])
+@login_required
+def atualiza_dividendos():
+    try:
+        acoes = Acao.query.all()
+        for acao in acoes:
+            if acao.usuario_id == current_user.id:
+                ativo = yf.Ticker(acao.ticker+".SA")
+                dividend_info = ativo.dividends
+                acao.last_yield = round(dividend_info.iloc[-1],2)
+                data_compra_str = acao.data_compra.strftime("%Y-%m-%d")
+                filtered_dividends = dividend_info[dividend_info.index >= data_compra_str]
+                total = 0
+                count = -1
+                for i in filtered_dividends:
+                    dividend = dividend_info.iloc[count]
+                    total = total + dividend
+                    count = count -1
+                acao.total_dividends = round(total * acao.quantidade, 2)
+                retorno = round(total * acao.quantidade, 2)
+                acao.yield_total = round((retorno/acao.valor_pago) * 100, 2)
+                print(acao.yield_total)
+                db.session.commit()
+        qry = db.session.query(func.sum(Acao.total_dividends).label("total_dividends")).filter_by(usuario_id=current_user.id)
+        valores = qry.first()
+        carteira = CarteiraAcoes.query.filter_by(usuario_id=current_user.id).first()
+        TotalDividendos = valores[0]
+        carteira.total_dividendos = round(TotalDividendos, 2)
+        db.session.commit()
+        flash("Dividendos atualizados", category='success')
+        return redirect(url_for('views.acoes'))
+    except:
+        flash("Não foi possível!", category="error")
+        return redirect(url_for('views.acoes'))
 #HIST_ACAO
 @views.route("/hist-acao", methods=["GET","POST"])
 @login_required
@@ -334,3 +380,9 @@ def rm_cripto():
     except:
         flash('Não foi possível!', category='error')
     return render_template('cripto/rm_cripto.html', usuario = current_user)
+
+#TAREFA
+@views.route('/tarefas', methods=["GET","POST"])
+@login_required
+def tarefas():
+    return render_template("tarefa/tarefas.html", usuario = current_user)

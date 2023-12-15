@@ -37,6 +37,15 @@ class Acao(db.Model):
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
     link = db.Column(db.String)
     last_yield = db.Column(db.Float)
+    total_dividends = db.Column(db.Float)
+    yield_total = db.Column(db.Float)
+
+class Dividendos(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    ticker = db.Column(db.String(10))
+    data_compra = db.Column(db.Date)
+    last_dividend = db.Column(db.Float)
+    total = db.Column(db.Float)
 
 class Crypto(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -18,6 +18,9 @@ table{
     border: 1px solid black;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 50px;
+}
+idiv{
     margin-bottom: 100px;
 }
 form{
@@ -59,14 +62,12 @@ footer{
     color:white;
     text-align: center;
     font-size: 0.8em;
-    padding: 5px;
-    margin-bottom: 0px;
+
 }
 footer a{
     color: white;
     font-weight: bolder;
     text-decoration: none;
-
 }
 footer a:hover{
     text-decoration: underline;
@@ -77,4 +78,5 @@ footer a:hover{
     position: fixed;
     width: 100%;
     text-align: center;
+    height: 20px;
 }
